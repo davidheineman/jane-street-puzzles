@@ -1,0 +1,9 @@
+beautifulsoup4
+huggingface_hub
+markdownify
+pandas
+Pillow
+pyarrow
+requests
+tqdm
+datasets
