@@ -2,7 +2,7 @@ import json
 import os
 import re
 from pathlib import Path
-from utils import DATA_DIR
+from utils import DATA_DIR_JS
 from utils.gpt import openai_init, generate_gpt
 
 
@@ -45,8 +45,8 @@ def read_md_file(file_path):
         return f.read()
 
 
-def process_solution_files(data_dir):
-    solution_dir = data_dir / "solution"
+def process_solution_files(DATA_DIR_JS):
+    solution_dir = DATA_DIR_JS / "solution"
     
     solution_contents = []
     puzzle_ids = []
@@ -72,9 +72,9 @@ def process_solution_files(data_dir):
 if __name__ == '__main__':
     openai_init()
     
-    answers = process_solution_files(Path(DATA_DIR))
+    answers = process_solution_files(Path(DATA_DIR_JS))
     
-    output_path = Path(DATA_DIR) / "answers.json"
+    output_path = Path(DATA_DIR_JS) / "answers.json"
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(answers, f, indent=2)
         

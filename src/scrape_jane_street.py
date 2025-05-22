@@ -2,9 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify as md
 from tqdm import tqdm
-from utils import replace_puzzle_images
+from utils import replace_puzzle_images, save_puzzle_data
 import os
-from utils import DATA_DIR
+from utils import DATA_DIR_JS
 
 BASE_URL = "https://www.janestreet.com"
 BASE_PUZZLE_URL = "https://www.janestreet.com/puzzles/archive/page{page_num}/index.html"
@@ -97,8 +97,8 @@ def scrape_puzzle_data(puzzle_links, solution_links):
 
         puzzle_name = puzzle_url.split('/')[-2]
 
-        puzzle_img_dir = os.path.join(DATA_DIR, 'problem', 'images', puzzle_name)
-        solution_img_dir = os.path.join(DATA_DIR, 'solution', 'images', puzzle_name)
+        puzzle_img_dir = os.path.join(DATA_DIR_JS, 'problem', 'images', puzzle_name)
+        solution_img_dir = os.path.join(DATA_DIR_JS, 'solution', 'images', puzzle_name)
         os.makedirs(puzzle_img_dir, exist_ok=True)
         os.makedirs(solution_img_dir, exist_ok=True)
 
@@ -128,27 +128,6 @@ def scrape_puzzle_data(puzzle_links, solution_links):
     return puzzle_data
 
 
-def save_puzzle_data(puzzle_data):
-    # Create data directory if it doesn't exist
-    os.makedirs(DATA_DIR, exist_ok=True)
-    os.makedirs(os.path.join(DATA_DIR, "problem"), exist_ok=True)
-    os.makedirs(os.path.join(DATA_DIR, "solution"), exist_ok=True)
-
-    # Save each puzzle and solution to separate files
-    for puzzle in puzzle_data:
-        puzzle_name = puzzle['puzzle_name']
-        
-        # Save puzzle content
-        puzzle_path = os.path.join(DATA_DIR, "problem", f"{puzzle_name}.md")
-        with open(puzzle_path, 'w', encoding='utf-8') as f:
-            f.write(puzzle['puzzle_content'])
-            
-        # Save solution content
-        solution_path = os.path.join(DATA_DIR, "solution", f"{puzzle_name}.md")
-        with open(solution_path, 'w', encoding='utf-8') as f:
-            f.write(puzzle['solution_content'])
-
-
 if __name__ == '__main__':
     puzzle_links = []
     solution_links = []
@@ -160,7 +139,5 @@ if __name__ == '__main__':
     # puzzle_links, solution_links = (['/puzzles/sum-one-somewhere-index/', '/puzzles/altered-states-2-index/'], ['/puzzles/sum-one-somewhere-solution', '/puzzles/altered-states-2-solution'])
 
     puzzle_data = scrape_puzzle_data(puzzle_links, solution_links)
-
     print(f"Scraped {len(puzzle_data)} puzzle/solution pairs")
-
-    save_puzzle_data(puzzle_data)
+    save_puzzle_data(puzzle_data, DATA_DIR_JS)

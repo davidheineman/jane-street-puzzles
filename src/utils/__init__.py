@@ -1,6 +1,26 @@
 import os
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data')
+DATA_DIR_JS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'jane_street')
+DATA_DIR_IBM = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'ibm')
+
+def save_puzzle_data(puzzle_data, data_dir):
+    os.makedirs(data_dir, exist_ok=True)
+    os.makedirs(os.path.join(data_dir, "problem"), exist_ok=True)
+    os.makedirs(os.path.join(data_dir, "solution"), exist_ok=True)
+
+    # Save each puzzle and solution to separate files
+    for puzzle in puzzle_data:
+        puzzle_name = puzzle['puzzle_name']
+        
+        # Save puzzle content
+        puzzle_path = os.path.join(data_dir, "problem", f"{puzzle_name}.md")
+        with open(puzzle_path, 'w', encoding='utf-8') as f:
+            f.write(puzzle['puzzle_content'])
+            
+        # Save solution content
+        solution_path = os.path.join(data_dir, "solution", f"{puzzle_name}.md")
+        with open(solution_path, 'w', encoding='utf-8') as f:
+            f.write(puzzle['solution_content'])
 
 def replace_puzzle_images(puzzle):
     """ Replace image names with 0.png, 1.png, ... """

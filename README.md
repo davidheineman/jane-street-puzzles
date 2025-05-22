@@ -4,7 +4,7 @@ https://huggingface.co/datasets/davidheineman/jane-street-puzzles
 
 ```sh
 pip install -r requirements.txt
-python src/scrape.py # will create data/ folder
+python src/scrape_jane_street.py # will create data/ folder
 python src/extract_answer.py # will create answers.json
 python src/convert_to_hf.py # will create staged/ folder
 ```
