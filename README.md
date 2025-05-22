@@ -4,14 +4,15 @@ https://huggingface.co/datasets/davidheineman/jane-street-puzzles
 
 ```sh
 pip install -r requirements.txt
-python scrape.py # will create data/ folder
-python convert_to_hf.py # will create staged/ folder
+python src/scrape.py # will create data/ folder
+python src/extract_answer.py # will create answers.json
+python src/convert_to_hf.py # will create staged/ folder
 ```
 
 ### TODO
 
-[ ] Answer extraction
-[ ] Scrape all pages (and the index page)
+[ ] Improve answer extraction
+[ ] Scrape the index page
 
 [ ] Fix image names: `[![](/puzzles/1.png)](/puzzles/1.png)` to `[IMG_1]`
 [ ] Create a dev split of 5 Qs

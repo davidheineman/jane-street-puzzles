@@ -11,12 +11,13 @@
     # 7) canary: string
 
 from io import BytesIO
+import json
 import os
 import pandas as pd
 from PIL import Image
 import re
 from pathlib import Path
-from hf import push_parquet_to_hf
+from utils.hf import push_parquet_to_hf
 from datasets import Dataset, Features, Value
 from datasets import Image as HFImage
 from utils import DATA_DIR
@@ -46,6 +47,10 @@ def read_md_file(file_path):
 def process_puzzle_files(data_dir, limit=None):
     problem_dir = data_dir / "problem"
     solution_dir = data_dir / "solution"
+
+    answers_file = data_dir / "answers.json"
+    with open(answers_file, 'r', encoding='utf-8') as f:
+        answers = json.loads(f.read())
     
     rows = []
 
@@ -60,6 +65,14 @@ def process_puzzle_files(data_dir, limit=None):
         
         # Read problem content
         problem_content = read_md_file(problem_file)
+
+        # All images occur at the beginning of the problem, so remove these
+        problem_content = problem_content.replace(
+            '[![](/puzzles/0.jpg)](/puzzles/0.jpg)',
+            ''
+        )
+        problem_content = re.sub(r'(?<!\n)\n(?!\n)', ' ', problem_content)
+        problem_content = problem_content.strip()
         
         # Read corresponding solution
         solution_file = solution_dir / problem_file.name
@@ -68,6 +81,7 @@ def process_puzzle_files(data_dir, limit=None):
         solution_content = solution_content.replace('\n\n**Congrats to this month’s solvers!**\n\n####', '')
         solution_content = solution_content.replace('\n\nCongrats to this month’s solvers!\n\n####', '')
         solution_content = solution_content.replace('\n\n####', '')
+        solution_content = solution_content.strip()
         
         # Get problem images from images folder
         problem_image_dir = problem_dir / "images" / puzzle_id
@@ -104,12 +118,12 @@ def process_puzzle_files(data_dir, limit=None):
                     
             # Get list of jpg images
             solution_images = [str(p) for p in sorted(solution_image_dir.glob("*.jpg"))]
+        
         # Create row dict
         row = {
-            'idx': idx,
             'question_name': puzzle_id.replace('-index', ''),
             'question': problem_content,
-            'answer': 'TODO',
+            'answer': answers.get(puzzle_id, None),
             'explanation': solution_content,
         }
         
@@ -146,6 +160,7 @@ def process_puzzle_files(data_dir, limit=None):
             #     row[f'explanation_image_{i}_preview'] = Image.open(BytesIO(f.read())).tobytes()
 
         row['canary'] = CANARY_STRING
+        row['idx'] = idx
             
         rows.append(row)
         
@@ -178,7 +193,6 @@ if __name__ == '__main__':
     os.makedirs('staged', exist_ok=True)
     
     features = Features({
-        'idx': Value('int64'),
         'question_name': Value('string'),
         'question': Value('string'),
         'answer': Value('string'),
@@ -186,8 +200,11 @@ if __name__ == '__main__':
         'question_image_1': Value('string'),
         # 'question_image_1_preview': HFImage(decode=True),
         'explanation_image_1': Value('string'),
+        'explanation_image_2': Value('string'),
+        'explanation_image_3': Value('string'),
         # 'explanation_image_1_preview': HFImage(decode=True),
-        'canary': Value('string')
+        'canary': Value('string'),
+        'idx': Value('int64'),
     })
 
     df = Dataset.from_pandas(df, features=features)

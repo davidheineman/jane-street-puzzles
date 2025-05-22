@@ -97,8 +97,8 @@ def scrape_puzzle_data(puzzle_links, solution_links):
 
         puzzle_name = puzzle_url.split('/')[-2]
 
-        puzzle_img_dir = os.path.join(os.path.dirname(__file__), 'data', 'problem', 'images', puzzle_name)
-        solution_img_dir = os.path.join(os.path.dirname(__file__), 'data', 'solution', 'images', puzzle_name)
+        puzzle_img_dir = os.path.join(DATA_DIR, 'problem', 'images', puzzle_name)
+        solution_img_dir = os.path.join(DATA_DIR, 'solution', 'images', puzzle_name)
         os.makedirs(puzzle_img_dir, exist_ok=True)
         os.makedirs(solution_img_dir, exist_ok=True)
 

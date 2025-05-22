@@ -1,6 +1,6 @@
 import os
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data')
 
 def replace_puzzle_images(puzzle):
     """ Replace image names with 0.png, 1.png, ... """
@@ -11,13 +11,24 @@ def replace_puzzle_images(puzzle):
     content = puzzle['puzzle_content']
     i = 0
     while i < len(content):
-        if '/puzzles/' in content[i:] and '.png' in content[i:]:
+        # Check for any image extension
+        extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.JPEG']
+        has_image = any(ext in content[i:] for ext in extensions)
+        
+        if '/puzzles/' in content[i:] and has_image:
             start = content.find('/puzzles/', i)
-            end = content.find('.png', start) + 4
+            
+            # Find the end by looking for any of the extensions
+            end = -1
+            for ext in extensions:
+                pos = content.find(ext, start)
+                if pos != -1 and (end == -1 or pos < end):
+                    end = pos + len(ext)
+                    
             original = content[start:end]
             
             if original not in image_map:
-                image_map[original] = f'/puzzles/{next_num}.png'
+                image_map[original] = f'/puzzles/{next_num}.jpg'
                 next_num += 1
                 
             replacement = image_map[original]
@@ -32,13 +43,24 @@ def replace_puzzle_images(puzzle):
     content = puzzle['solution_content']
     i = 0
     while i < len(content):
-        if '/puzzles/' in content[i:] and '.png' in content[i:]:
+        # Check for any image extension
+        extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.JPEG']
+        has_image = any(ext in content[i:] for ext in extensions)
+        
+        if '/puzzles/' in content[i:] and has_image:
             start = content.find('/puzzles/', i)
-            end = content.find('.png', start) + 4
+            
+            # Find the end by looking for any of the extensions
+            end = -1
+            for ext in extensions:
+                pos = content.find(ext, start)
+                if pos != -1 and (end == -1 or pos < end):
+                    end = pos + len(ext)
+                    
             original = content[start:end]
             
             if original not in image_map:
-                image_map[original] = f'/puzzles/{next_num}.png'
+                image_map[original] = f'/puzzles/{next_num}.jpg'
                 next_num += 1
                 
             replacement = image_map[original]
