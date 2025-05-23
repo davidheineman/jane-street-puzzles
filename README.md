@@ -38,8 +38,11 @@ The Jane Street puzzles resemble *Ponder This* quite closely, so this repo conta
 
 ### TODO
 
+- [ ] Extraction for IBM, split by '\n---\n'
+
 - [ ] Improve answer extraction
-- [ ] Scrape the index page
+- [ ] Scrape the index page for Jane Street
+- [ ] Add image previews to dataset
 
 - [ ] Fix image names: `[![](/puzzles/1.png)](/puzzles/1.png)` to `[IMG_1]`
 - [ ] Create a dev split of 5 Qs

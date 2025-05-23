@@ -57,7 +57,8 @@ def push_parquet_to_hf(parquet_file_path, hf_dataset_name, split_name='main', pr
         repo_id=hf_dataset_name,
         repo_type="dataset"
     )
-    print(f"File '{path_in_repo}' uploaded to '{hf_dataset_name}'.")
+    url = f'https://huggingface.co/datasets/{hf_dataset_name}'
+    print(f"File '{path_in_repo}' uploaded to '{hf_dataset_name}'. See {url}")
 
 
 def download_parquet_from_hf(hf_dataset_name, file_name, local_path):

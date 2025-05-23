@@ -1,7 +1,10 @@
 import os
 
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data')
 DATA_DIR_JS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'jane_street')
 DATA_DIR_IBM = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'ibm')
+
+os.makedirs('staged', exist_ok=True)
 
 def save_puzzle_data(puzzle_data, data_dir):
     os.makedirs(data_dir, exist_ok=True)
