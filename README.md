@@ -36,6 +36,10 @@ python src/convert_to_hf.py # will create staged/ folder
 
 The Jane Street puzzles resemble *Ponder This* quite closely, so this repo contains a scraper for both problem sets.
 
+### Eval
+
+See [eval/README.md](eval/README.md). We use a basic harness based on [HLE](https://github.com/centerforaisafety/hle).
+
 ### TODO
 
 - [ ] Extraction for IBM, split by '\n---\n'
@@ -48,3 +52,4 @@ The Jane Street puzzles resemble *Ponder This* quite closely, so this repo conta
 - [ ] Create a dev split of 5 Qs
 - [ ] Create a text-only split
 - [ ] Some explanations have PII
+- [ ] Eval harness should use all input/explanation images

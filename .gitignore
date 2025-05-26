@@ -1,3 +1,4 @@
 data/
 staged/
 __pycache__/
+*.json
